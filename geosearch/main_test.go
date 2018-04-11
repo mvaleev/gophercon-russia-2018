@@ -1,44 +1,45 @@
 package geosearch
 
 import (
+	"fmt"
 	"testing"
 )
 
 func prepare() *Index {
-	i := NewIndex(13 /* ~ 1km */)
-	i.AddUser(1, 14.1313, 14.1313)
-	i.AddUser(2, 14.1314, 14.1314)
-	i.AddUser(3, 14.1311, 14.1311)
-	i.AddUser(10, 14.2313, 14.2313)
-	i.AddUser(11, 14.0313, 14.0313)
+	i := NewIndex(20 /* ~ 1km */)
+	i.AddUser(1, 37.604178, 55.608279)
+	i.AddUser(2, 37.612375, 55.611211)
+	i.AddUser(3, 37.581741, 55.602520)
 	return i
 }
 
 func TestSearch(t *testing.T) {
 	indx := prepare()
 
-	found, _ := indx.Search(14.1313, 14.1313, 2000)
-	if len(found) != 3 {
-		t.Fatal("error while searching with radius 2000")
+	found, _ := indx.Search(37.608821, 55.609525, 315)
+	fmt.Println("found:", found)
+	if len(found) != 2 {
+		t.Fatal("error while searching with radius 315")
 	}
 
-	found, _ = indx.Search(14.1313, 14.1313, 20000)
-	if len(found) != 5 {
-		t.Fatal("error while searching with radius 20000")
+	found, _ = indx.Search(37.608821, 55.609525, 1870)
+	fmt.Println("found:", found)
+	if len(found) != 3 {
+		t.Fatal("error while searching with radius 1870")
 	}
 }
 
 func TestSearchFaster(t *testing.T) {
 	indx := prepare()
 
-	found, _ := indx.SearchFaster(14.1313, 14.1313, 2000)
-	if len(found) != 3 {
-		t.Fatal("error while searching with radius 2000")
+	found, _ := indx.SearchFaster(37.608821, 55.609525, 210)
+	if len(found) != 2 {
+		t.Fatal("error while searching with radius 210")
 	}
 
-	found, _ = indx.SearchFaster(14.1313, 14.1313, 20000)
-	if len(found) != 5 {
-		t.Fatal("error while searching with radius 20000")
+	found, _ = indx.SearchFaster(37.608821, 55.609525, 1000)
+	if len(found) != 3 {
+		t.Fatal("error while searching with radius 1000")
 	}
 }
 
