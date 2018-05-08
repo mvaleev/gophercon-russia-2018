@@ -88,7 +88,13 @@ func (i *Index) SearchFaster(lon, lat float64, radius uint32) ([]uint32, error) 
 			begin := cellID.ChildBeginAtLevel(i.storageLevel)
 			end := cellID.ChildEndAtLevel(i.storageLevel)
 			i.bt.AscendRange(userList{cellID: begin}, userList{cellID: end.Next()}, func(item btree.Item) bool {
-				result = append(result, item.(userList).list...)
+				pointFromCellID := item.(userList).cellID.LatLng()
+				distance := latlng.Distance(pointFromCellID)
+
+				if distance < s1.Angle(centerAngle) {
+					result = append(result, item.(userList).list...)
+				}
+
 				return true
 			})
 		} else {
